@@ -17,6 +17,9 @@ networks:
 services:
   web:
     image: odoo:15
+    environment:
+      - USER=$POSTGRES_USER
+      - PASSWORD=$POSTGRES_PASSWORD
     ports:
       - "8069:8069"
     networks:
@@ -27,6 +30,8 @@ services:
       - odoo-addon:/mnt/extra-addons
     depends_on:
       - db
+
+
 
   db:
     image: postgres:14
