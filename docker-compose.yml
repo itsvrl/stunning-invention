@@ -18,6 +18,7 @@ services:
   web:
     image: odoo:15
     environment:
+      - HOST=$POSTGRES_DB
       - USER=$POSTGRES_USER
       - PASSWORD=$POSTGRES_PASSWORD
     ports:
