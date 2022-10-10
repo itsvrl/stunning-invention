@@ -1,0 +1,40 @@
+version: "3.3"
+
+volumes:
+  odoo-s3:
+    driver: local
+  odoo-conf:
+    driver: local
+  odoo-addon:
+    driver: local
+  odoo-db:
+    driver: local
+
+networks:
+  finances:
+    external: true
+
+services:
+  web:
+    image: odoo:15
+    ports:
+      - "8069:8069"
+    networks:
+      - finances
+    volumes:
+      - odoo-s3:/var/lib/odoo
+      - odoo-conf:/etc/odoo
+      - odoo-addon:/mnt/extra-addons
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    networks:
+      - finances
+    environment:
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db:/var/lib/postgresql/data/pgdata
